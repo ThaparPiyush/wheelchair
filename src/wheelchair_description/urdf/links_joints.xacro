@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<!--Include Files-->
+  <xacro:include filename="$(find wheelchair_description)/urdf/common_properties.xacro" />
+<!--macro for cylinder shaped links(r,lwheels and lidar)-->
+ <xacro:macro name="m_link_cylinder" params="name origin_xyz origin_rpy mass ixx ixy ixz iyy iyz izz filename scale material ">
+  <link name="${name}">
+    <inertial>            <!--Inertial valuse include origin, mass and inertias as per CAD model-->
+      <mass value="${mass}" />
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" /> <!-- Taken at the output coordinate system-->
+    </inertial>
+    <collision>           <!-- Collision values include dimensions and origin-->
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <geometry>
+        <mesh filename="${filename}" scale="${scale}"/>
+      </geometry>
+    </collision>
+    <visual>               <!-- Visual valuse include origin, material and mesh to make model look similar to real robot-->
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <geometry>
+        <mesh filename="${filename}" scale="${scale}"/>
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+  </link>
+</xacro:macro>
+
+<!--macro for cylinder shaped links(r,lwheels and lidar)-->
+ <xacro:macro name="m1_link_cylinder" params="name origin_xyz origin_rpy mass radius length radius_2 length_2 ixx ixy ixz iyy iyz izz material ">
+  <link name="${name}">
+    <inertial>            <!--Inertial valuse include origin, mass and inertias as per CAD model-->
+      <mass value="${mass}" />
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" /> <!-- Taken at the output coordinate system-->
+    </inertial>
+    <collision>           <!-- Collision values include dimensions and origin-->
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <geometry>
+       <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+    </collision>
+    <visual>               <!-- Visual valuse include origin, material and mesh to make model look similar to real robot-->
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <geometry>
+       <cylinder radius="${radius_2}" length="${length_2}"/>
+        <!-- <mesh filename="${filename}" scale="${scale}"/> -->
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+  </link>
+</xacro:macro>
+
+<!--macro for box shaped links(r,lwheels and lidar)-->
+ <xacro:macro name="m_link_box" params="name origin_xyz origin_rpy size mass ixx ixy ixz iyy iyz izz v_origin_xyz v_origin_rpy filename scale material ">
+  <link name="${name}">
+    <inertial>            <!--Inertial valuse include origin, mass and inertias as per CAD model-->
+      <mass value="${mass}" />
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" /> <!-- Taken at the output coordinate system-->
+    </inertial>
+    <collision>           <!-- Collision values include dimensions and origin-->
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <geometry>
+        <box size= "${size}" />
+      </geometry>
+    </collision>
+    <visual>               <!-- Visual valuse include origin, material and mesh 0.057 0.083 0.29to make model look similar to real robot-->
+      <origin rpy="${v_origin_rpy}" xyz="${v_origin_xyz}" />
+      <geometry>
+        <!-- <mesh filename="${filename}" scale="${scale}"/> -->
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+  </link>
+</xacro:macro>
+
+ <xacro:macro name="f_link_box" params="name origin_xyz origin_rpy size mass ixx ixy ixz iyy iyz izz material ">
+  <link name="${name}">
+    <inertial>            <!--Inertial valuse include origin, mass and inertias as per CAD model-->
+      <mass value="${mass}" />
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" /> <!-- Taken at the output coordinate system-->
+    </inertial>
+    <collision>           <!-- Collision values include dimensions and origin-->
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <geometry>
+        <box size= "${size}" />
+      </geometry>
+    </collision>
+    <visual>               <!-- Visual valuse include origin, material and mesh to make model look similar to real robot-->
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <geometry>
+        <box size= "${size}" />
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+   </link>
+ </xacro:macro>
+
+
+<xacro:macro name="m_link_sphere" params="name origin_xyz origin_rpy radius radius_2 mass ixx ixy ixz iyy iyz izz material">
+ <link name="${name}">
+   <inertial>            <!--Inertial valuse include origin, mass and inertias as per CAD model-->
+     <mass value="${mass}" />
+     <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+     <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" />
+   </inertial>
+   <collision>          <!-- Collision values include dimensions and origin-->
+     <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+     <geometry>
+       <sphere radius="${radius}"/>
+     </geometry>
+   </collision>
+   <visual>             <!-- Visual valuse include origin, material and mesh to make model look similar to real robot-->
+     <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+     <geometry>
+        <sphere radius="${radius_2}"/>
+       <!-- <mesh filename="${filename}" scale="${scale}"/> -->
+     </geometry>
+     <material name="${material}"/>
+   </visual>
+ </link>
+</xacro:macro>
+<!-- macro of moving joints like l,rwheels-->
+<!-- It includes parent link, child link, limits, axis, origin, dynamics and transmission of the robot-->
+<xacro:macro name="m_joint" params="name type axis_xyz axis_rpy origin_rpy origin_xyz parent limit_e limit_v lower upper child damping friction ">
+   <joint name="${name}" type="${type}">
+     <axis xyz="${axis_xyz}" rpy="${axis_rpy}" />
+     <limit effort="${limit_e}" velocity="${limit_v}" lower="${lower}" upper="${upper}"/>
+     <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+     <dynamics damping="${damping}" friction="${friction}" />
+     <parent link="${parent}" />
+     <child link="${child}" />
+   </joint>
+   <transmission name="trans_${name}">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="${name}">
+       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="motor_${name}">
+       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+       <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+   </transmission>
+ </xacro:macro>
+
+<xacro:macro name="w_joint" params="name type axis_xyz axis_rpy origin_rpy origin_xyz parent limit_e limit_v child damping friction ">
+   <joint name="${name}" type="${type}">
+     <axis xyz="${axis_xyz}" rpy="${axis_rpy}" />
+     <limit effort="${limit_e}" velocity="${limit_v}"/>
+     <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+     <dynamics damping="${damping}" friction="${friction}" />
+     <parent link="${parent}" />
+     <child link="${child}" />
+   </joint>
+   <transmission name="trans_${name}">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="${name}">
+       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="motor_${name}">
+       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+       <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+   </transmission>
+ </xacro:macro>
+
+<xacro:macro name="m2_joint" params="name type axis_xyz axis_rpy origin_rpy origin_xyz parent limit_e limit_v lower upper child damping friction ">
+   <joint name="${name}" type="${type}">
+     <axis xyz="${axis_xyz}" rpy="${axis_rpy}" />
+     <limit effort="${limit_e}" velocity="${limit_v}" lower="${lower}" upper="${upper}"/>
+     <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+     <dynamics damping="${damping}" friction="${friction}" />
+     <parent link="${parent}" />
+     <child link="${child}" />
+   </joint>
+ </xacro:macro>
+
+
+<xacro:macro name="mimic_joint" params="name type axis_xyz axis_rpy origin_rpy origin_xyz parent joint multiplier offset limit_e limit_v lower upper child damping friction ">
+   <joint name="${name}" type="${type}">
+     <axis xyz="${axis_xyz}" rpy="${axis_rpy}" />
+     <limit effort="${limit_e}" velocity="${limit_v}" lower="${lower}" upper="${upper}"/>
+     <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+     <dynamics damping="${damping}" friction="${friction}" />
+     <parent link="${parent}" />
+     <child link="${child}" />
+     <mimic joint="${joint}" multiplier="${multiplier}" offset="${offset}" />
+   </joint>
+ </xacro:macro>
+
+
+ <!-- macro of fixed joints like casters and rplidar-->
+ <!-- It includes parent link, child link, axis and origin of the robot-->
+ <xacro:macro name="f_joint" params="name type axis_xyz origin_rpy origin_xyz parent child">
+   <joint name="${name}" type="${type}">
+     <axis xyz="${axis_xyz}" />
+     <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+     <parent link="${parent}" />
+     <child link="${child}" />
+   </joint>
+ </xacro:macro>
+
+</robot>

@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<robot name="wheelchair" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- differential drive -->
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <alwaysOn>true</alwaysOn>
+      <commandTopic>wheelchair/cmd_vel</commandTopic>
+      <odometryTopic>wheelchair/odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometrySource>world</odometrySource>
+      <publishOdomTF>true</publishOdomTF>
+      <robotBaseFrame>base_link</robotBaseFrame>
+      <publishWheelTF>false</publishWheelTF>
+      <publishTf>true</publishTf>
+      <publishWheelJointState>true</publishWheelJointState>
+      <legacyMode>false</legacyMode>
+      <updateRate>20</updateRate>
+      <leftJoint>chassis_to_left_wheel</leftJoint>
+      <rightJoint>chassis_to_right_wheel</rightJoint>
+      <wheelSeparation>0.420</wheelSeparation>
+      <wheelDiameter>0.1332</wheelDiameter>
+      <wheelAcceleration>1</wheelAcceleration>
+      <wheelTorque>40</wheelTorque>
+      <rosDebugLevel>na</rosDebugLevel>
+    </plugin>
+  </gazebo>
+
+
+  <!--Gazebo related physics values of left wheel joint-->
+  <gazebo reference="chassis_to_left_wheel">
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.1</maxVel>
+    <fdir1>1 0 0</fdir1>
+  </gazebo>
+  <!--Gazebo related physics values of right wheel joint-->
+  <gazebo reference="chassis_to_right_wheel">
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.1</maxVel>
+    <fdir1>1 0 0</fdir1>
+  </gazebo>
+
+  <gazebo reference="chassis">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="caster1">
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <gazebo reference="caster2">
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+    <gazebo reference="rod1">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="rod2">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+    <gazebo reference="camera_base_rod">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+    <gazebo reference="lidar_base_rod">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="rplidar">
+    <material>Gazebo/DarkGrey</material>
+    <sensor type="gpu_ray" name="head_rplidar_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.04719</min_angle>
+            <max_angle>1.04719</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.2</min>
+          <max>6.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+               achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+               stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+               reading. -->
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_gpu_laser.so">
+        <topicName>wheelchair/scan</topicName>
+        <frameName>rplidar</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="hokuyo_front">
+   <sensor type="ray" name="head_hokuyo_sensor1">
+    <pose>0 0 0 0 0 0</pose>
+    <always_on>1</always_on>
+    <update_rate>20</update_rate>
+    <visualize>false</visualize>
+    <ray>
+      <scan>
+        <horizontal>
+          <!-- The URG-04LX-UG01  has  683 steps with 0.35139 Degree resolution -->
+          <resolution>1</resolution>
+          <max_angle>1.658</max_angle> <!-- 120 Degree -->
+          <min_angle>-1.658</min_angle> <!-- -120 Degree -->
+          <!--max_angle>3.14</max_angle--> <!-- 120 Degree -->
+          <!--min_angle>-3.14</min_angle--> <!-- -120 Degree -->
+          <samples>720</samples>
+        </horizontal>
+      </scan>
+      <range>
+        <min>0.15</min>
+        <max>30.0</max>
+        <resolution>0.01</resolution>
+      </range>
+      <noise>
+        <type>gaussian</type>
+        <!-- Noise parameters based on published spec for Hokuyo laser
+             achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+             stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+             reading. -->
+        <mean>0.0</mean>
+        <stddev>0.01</stddev>
+      </noise>
+    </ray>
+    <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+      <topicName>/wheelchair/scan_filtered1</topicName>
+      <frameName>hokuyo_front</frameName>
+    </plugin>
+   </sensor>
+  </gazebo>
+
+  <gazebo reference="hokuyo_back">
+   <sensor type="ray" name="head_hokuyo_sensor2">
+    <pose>0 0 0 0 0 0</pose>
+    <update_rate>20</update_rate>
+    <always_on>1</always_on>
+    <visualize>false</visualize>
+    <ray>
+      <scan>
+        <horizontal>
+          <!-- The URG-04LX-UG01  has  683 steps with 0.35139 Degree resolution -->
+          <resolution>1</resolution>
+          <max_angle>1.658</max_angle> <!-- 120 Degree -->
+          <min_angle>-1.658</min_angle> <!-- -120 Degree -->
+          <!--max_angle>3.14</max_angle--> <!-- 120 Degree -->
+          <!--min_angle>-3.14</min_angle--> <!-- -120 Degree -->
+          <samples>720</samples>
+        </horizontal>
+      </scan>
+      <range>
+        <min>0.15</min>
+        <max>30</max>
+        <resolution>0.01</resolution>
+      </range>
+      <noise>
+        <type>gaussian</type>
+        <!-- Noise parameters based on published spec for Hokuyo laser
+             achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+             stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+             reading. -->
+        <mean>0.0</mean>
+        <stddev>0.01</stddev>
+      </noise>
+    </ray>
+    <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+      <topicName>/wheelchair/scan_filtered2</topicName>
+      <frameName>hokuyo_back</frameName>
+    </plugin>
+   </sensor>
+  </gazebo>
+
+</robot>

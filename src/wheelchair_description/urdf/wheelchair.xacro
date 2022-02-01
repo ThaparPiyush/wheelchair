@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name= "wheelchair" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--Include Files-->
+  <xacro:include filename="$(find wheelchair_description)/urdf/links_joints.xacro" />
+  <xacro:include filename="$(find wheelchair_description)/urdf/wheelchair_gazebo.xacro" />
+   <xacro:include filename="$(find wheelchair_description)/urdf/_d435.xacro" />
+
+
+  <link name="base_link"/>
+
+    <joint name="base_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="chassis" />
+      <origin xyz="0 0 0.2" rpy="0 0 0"/>
+    </joint>
+
+    <link name='chassis'>
+      <pose>0 0 0.1 0 0 0</pose>
+
+      <inertial>
+    <!--ALL MASSES IN KILOGRAM-->
+        <mass value="8.96"/>
+        <origin xyz="0 0 0" rpy=" 0 0 0"/>
+    <!--ALL INERTIA VALUES IN KILOGRAM PER SQUARE METER-->
+        <inertia
+            ixx="2.83" ixy="-0.12" ixz="-1.17"
+            iyy="3.47" iyz="0.29"
+            izz="0.73"
+        />
+      </inertial>
+
+      <collision>
+        <origin xyz="0.1 0 0" rpy=" 0 0 0"/>
+        <geometry>
+          <box size="0.75 0.40 0.60"/>
+        </geometry>
+    <material name="black"/>
+      </collision>
+
+     <visual>
+        <origin xyz="0 0 0" rpy=" 0 0 3.14"/>
+        <geometry>
+          <mesh filename="package://wheelchair_description/meshes/wheelchair.dae" scale="0.01 0.01 0.01" />
+        </geometry>
+    <material name="black"/>
+      </visual>
+    </link>
+
+    <!--Left Wheel-->
+    <m1_link_cylinder name="left_wheel"
+                      origin_rpy="0 0 0" origin_xyz="0 0 0.027"
+                      mass="0.10441"
+                      ixx="0.1000000042" ixy="0" ixz="0"
+                      iyy="0.1000000042" iyz="0"
+                      izz="0.1000000040"
+                      radius="0.29" length="0.06"
+                      radius_2="0.0028" length_2 ="0.005"
+                      material="grey"/>
+                      <!-- filename="package://wheelchair_description/meshes/rm100_isg_wheel.dae" scale="1 1 1"/> -->
+    <!--joint between chassis and Left wheel-->
+        <w_joint name="chassis_to_left_wheel"
+                 type="continuous"
+                 axis_xyz="0 0 1" axis_rpy="0 0 0"
+                 limit_e="100" limit_v="20"
+                 damping="1.0" friction="200000.0"
+                 origin_rpy="-1.57 0 0" origin_xyz="-0.22 0.32 -0.15"
+                 parent="chassis" child="left_wheel"/>
+      <!-- inertia values are added by 0.1 in both left and right wheel to avoid collapsing of model in gazebo-->
+
+    <!--joint between chassis and Right Wheel-->
+    <!--Right Wheel-->
+    <m1_link_cylinder name="right_wheel"
+                       origin_rpy="0 0 0" origin_xyz="0 0 0.027"
+                       mass="0.10441"
+                       ixx="0.1000000042" ixy="0" ixz="0"
+                       iyy="0.1000000042" iyz="0"
+                       izz="0.1000000040"
+                       radius="0.29" length="0.06"
+                       radius_2="0.0028" length_2 ="0.005"
+                       material="grey"/>
+                      <!-- filename="package://wheelchair_description/meshes/rm100_isg_wheel.dae" scale="1 1 1"/> -->
+
+    <w_joint name="chassis_to_right_wheel"
+             type="continuous"
+             axis_xyz="0 0 1"
+             axis_rpy="0 0 0"
+             limit_e="100" limit_v="20"
+             damping="1.0" friction="200000.0"
+             origin_rpy="-1.57 0 0" origin_xyz="-0.22 -0.27 -0.15"
+             parent="chassis" child="right_wheel" />
+
+    <!--Caster 1,2 and there joints with Base Link-->
+
+    <m_link_sphere name="caster1"
+                  origin_rpy="0 0 0" origin_xyz="0 0 0"
+                  mass="0.45164"
+                  ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
+                  iyy="0.100000004345" iyz="0.100000002360"
+                  izz="0.100000003315"
+                  material="black"
+                  radius="0.1"
+                  radius_2="0.001"/>
+
+    <f_joint name="chassis_to_caster1"
+             type="fixed"
+             axis_xyz="0 0 0"
+             origin_rpy="0 0 0" origin_xyz="0.2 -0.25 -0.33"
+             parent="chassis" child="caster1" />
+
+     <m_link_sphere name="caster2"
+                    origin_rpy="0 0 0" origin_xyz="0 0 0"
+                    mass="0.45164"
+                    ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
+                    iyy="0.100000004345" iyz="0.100000002360"
+                    izz="0.100000003315"
+                    material="black"
+                    radius="0.1"
+                    radius_2="0.001"/>
+
+    <f_joint name="chassis_to_caster2"
+             type="fixed"
+             axis_xyz="0 0 0"
+             origin_rpy="0 0 0" origin_xyz="0.2 0.25 -0.33"
+             parent="chassis" child="caster2" />
+
+     <f_link_box name="rod1"
+                 origin_rpy="0 0 0" origin_xyz="0 0 0"
+                 mass="0.45164"
+                 ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
+                 iyy="0.100000004345" iyz="0.100000002360"
+                 izz="0.100000003315"
+                 material="black"
+                 size="0.016 0.016 0.6"/>
+
+    <f_joint name="chassis_to_rod1"
+             type="fixed"
+             axis_xyz="0 0 0"
+             origin_rpy="0 0 0" origin_xyz="-0.23 0.24 0.65"
+             parent="chassis" child="rod1" />
+
+     <f_link_box name="rod2"
+                 origin_rpy="0 0 0" origin_xyz="0 0 0"
+                 mass="0.45164"
+                 ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
+                 iyy="0.100000004345" iyz="0.100000002360"
+                 izz="0.100000003315"
+                 material="black"
+                 size="0.016 0.016 0.6"/>
+
+    <f_joint name="chassis_to_rod2"
+             type="fixed"
+             axis_xyz="0 0 0"
+             origin_rpy="0 0 0" origin_xyz="-0.23 -0.24 0.65"
+             parent="chassis" child="rod2" />
+
+     <f_link_box name="camera_base_rod"
+                 origin_rpy="0 0 0" origin_xyz="0 0 0"
+                 mass="0.45164"
+                 ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
+                 iyy="0.100000004345" iyz="0.100000002360"
+                 izz="0.100000003315"
+                 material="black"
+                 size="0.016 0.48 0.016"/>
+
+    <f_joint name="chassis_to_camera_base_rod"
+             type="fixed"
+             axis_xyz="0 0 0"
+             origin_rpy="0 0 0" origin_xyz="-0.23 0 0.650"
+             parent="chassis" child="camera_base_rod" />
+
+     <f_link_box name="lidar_base_rod"
+                 origin_rpy="0 0 0" origin_xyz="0 0 0"
+                 mass="0.45164"
+                 ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
+                 iyy="0.100000004345" iyz="0.100000002360"
+                 izz="0.100000003315"
+                 material="black"
+                 size="0.016 0.48 0.016"/>
+
+    <f_joint name="chassis_to_lidar_base_rod"
+             type="fixed"
+             axis_xyz="0 0 0"
+             origin_rpy="0 0 0" origin_xyz="0.23 0 -0.15"
+             parent="chassis" child="lidar_base_rod" />
+
+<!--RP Lidar-->
+  <m_link_cylinder name="rplidar"
+                   origin_rpy="0 0 0" origin_xyz="0 0 0"
+                   mass="0.10441"
+                   ixx="0.1000000042" ixy="0" ixz="0"
+                   iyy="0.1000000042" iyz="0"
+                   izz="0.1000000040"
+                   material="black"
+                   filename="package://wheelchair_description/meshes/rplidar.dae" scale="1 1 1"/>
+
+<!-- joint between chassis and rplidar -->
+      <f_joint name="chassis_to_rplidar"
+               type="fixed"
+               axis_xyz="0 0 0"
+               origin_rpy="0 0 0" origin_xyz="0.23 0 -0.15"
+               parent="chassis" child="rplidar" />
+
+<!--Real_Sense-->
+
+      <sensor_d435 parent="base_link">
+        <origin xyz="-0.23 0 0.660" rpy="0 0 0"/>
+      </sensor_d435>
+
+    <!--Gazebo Plugin-->
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <!-- <robotNamespace>/wheelchair</robotNamespace> -->
+        <legacyModeNS>true</legacyModeNS>
+      </plugin>
+    </gazebo>
+
+</robot>
