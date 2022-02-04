@@ -1,0 +1,48 @@
+#Commit File
+
+$$\      $$\ $$\                           $$\           $$\                 $$\           
+$$ | $\  $$ |$$ |                          $$ |          $$ |                \__|          
+$$ |$$$\ $$ |$$$$$$$\   $$$$$$\   $$$$$$\  $$ | $$$$$$$\ $$$$$$$\   $$$$$$\  $$\  $$$$$$\  
+$$ $$ $$\$$ |$$  __$$\ $$  __$$\ $$  __$$\ $$ |$$  _____|$$  __$$\  \____$$\ $$ |$$  __$$\ 
+$$$$  _$$$$ |$$ |  $$ |$$$$$$$$ |$$$$$$$$ |$$ |$$ /      $$ |  $$ | $$$$$$$ |$$ |$$ |  \__|
+$$$  / \$$$ |$$ |  $$ |$$   ____|$$   ____|$$ |$$ |      $$ |  $$ |$$  __$$ |$$ |$$ |      
+$$  /   \$$ |$$ |  $$ |\$$$$$$$\ \$$$$$$$\ $$ |\$$$$$$$\ $$ |  $$ |\$$$$$$$ |$$ |$$ |      
+\__/     \__|\__|  \__| \_______| \_______|\__| \_______|\__|  \__| \_______|\__|\__|      
+                                                                                           
+                                                                                           
+                                                                                           
+                                                                                                           
+[FEATURE | BUG | DOCS | CHORE]
+# One liner describing the change(<=50 chars)
+
+# FEATURE: When you are adding new feature then use this tag.
+#
+# BUG: When you are fixing an issue in the repository.
+#
+# DOCS: When you are updating the documentation for the package.
+#
+# CHORE: When you are doing some minor code re-adjustments for re-factoring
+# which does not changes any interface or fixes any bug.
+
+[DESCRIPTION]
+# Description (<= 72 chars)
+# Should reach max 72 characters before wrapping to new
+# line. Keep this section descriptive.
+#Describe the issue you are facing and how you solved it with the proposed changes.
+
+[TESTING]
+
+# Explain the how you tested the change. If possible also provide links
+# where your working solution is hosted so that reviewer can test it.
+#How you tested this change.
+
+[TRELLO CARD LINK]
+# Add trello card link which corresponds to this commit.
+
+[REVIEWED BY]
+# Add the reviewer name who reviewed this change.
+
+
+
+
+
