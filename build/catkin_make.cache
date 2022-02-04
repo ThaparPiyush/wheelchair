@@ -1,2 +1,0 @@
-dependencies/hls_lfcd_lds_driver:motion:wheelchair_description
--DCATKIN_DEVEL_PREFIX=/home/piyush/wheelchair/devel -DCMAKE_INSTALL_PREFIX=/home/piyush/wheelchair/install -G Unix Makefiles
