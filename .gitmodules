@@ -1,0 +1,13 @@
+[submodule "src/dependencies/cartographer"]
+	path = src/dependencies/cartographer
+	url = https://github.com/googlecartographer/cartographer.git
+[submodule "src/dependencies/cartographer_ros"]
+	path = src/dependencies/cartographer_ros
+	url = https://github.com/googlecartographer/cartographer_ros.git
+[submodule "src/dependencies/ceres-solver"]
+	path = src/dependencies/ceres-solver
+	url = https://github.com/ceres-solver/ceres-solver.git
+[submodule "src/dependencies/robot_navigation"]
+	path = src/dependencies/robot_navigation
+	url = https://github.com/locusrobotics/robot_navigation.git
+	branch = melodic

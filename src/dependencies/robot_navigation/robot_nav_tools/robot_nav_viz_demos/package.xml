@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot_nav_viz_demos</name>
+  <version>0.3.0</version>
+  <description>Demos for testing/demonstrating the robot_nav_rviz_plugins and color_util packages</description>
+  <maintainer email="davidvlu@gmail.com">David V. Lu!!</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>angles</depend>
+  <depend>color_util</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_2d_msgs</depend>
+  <depend>nav_2d_utils</depend>
+  <depend>nav_grid</depend>
+  <depend>nav_grid_iterators</depend>
+  <depend>nav_grid_pub_sub</depend>
+  <depend>pluginlib</depend>
+  <depend>robot_nav_rviz_plugins</depend>
+  <depend>rosbag</depend>
+  <depend>roscpp</depend>
+  <depend>rviz</depend>
+  <test_depend>roslaunch</test_depend>
+  <test_depend>roslint</test_depend>
+  <export>
+    <robot_nav_rviz_plugins plugin="${prefix}/robot_nav_rviz_plugins.xml"/>
+    <rviz plugin="${prefix}/rviz_plugins.xml"/>
+  </export>
+</package>

@@ -16,5 +16,6 @@
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find wheelchair_description)/urdf/wheelchair.xacro" />
 
 
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model rm_100_alpha -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
-</launch>
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model wheelchair -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param /robot_description" respawn="false"/>
+    
+    </launch>

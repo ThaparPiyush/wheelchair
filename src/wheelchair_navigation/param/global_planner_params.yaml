@@ -1,0 +1,27 @@
+DluxGlobalPlanner:
+# low neutral costs will result in longer paths that avoid high costs. Higher neutral costs will sometimes result in paths that go through high costs if the path is much shorter.
+  neutral_cost: 20 #cost reduce on 19/12 for preferred path tuning.
+  scale: 3.0
+  unknown_interpretation: expensive
+#default false:  if you don't want global path to change use true
+  path_caching: false
+#improvement_threshold less than zero to always use the cached plan if it is valid
+#improvement_threshold = 0 to use the new plan if it is better than the cached plan. But doesn't use new plans if their path cost is equal to or greater than the cached path cost
+#improvement_threshold >= 0 to use the new plan if it is significantly better
+  improvement_threshold: 10.0
+  publish_potential: false
+  print_statistics: false
+  potential_calculator: dlux_plugins::AStar
+  traceback: dlux_plugins::VonNeumannPath
+  # traceback: dlux_plugins::VonNeumannPath
+
+  # AStar
+  manhattan_heuristic: false
+  use_kernel: true
+  minimum_requeue_change: 1.0
+
+  # GradientPath
+  # step_size: 0.2
+  # lethal_cost: 250.0
+  # iteration_factor: 10
+  # grid_step_near_high: false

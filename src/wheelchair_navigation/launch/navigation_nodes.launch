@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<launch>
+  <arg default="$(find wheelchair_cartographer)/maps/hospital.yaml" name="map_file" />
+  <arg default="false" name="open_rviz" />
+  <arg default="navigation/cmd_vel" name="cmd_vel_topic" />
+  <arg default="nav_odometry" name="odom_topic" />
+  <arg name= "namespace" default= "$(env ROBOT_NAMESPACE)"/>
+  <arg name= "id_namespace" default= "$(env ROBOT_NAMESPACE_ID)"/>
+  <arg name="odom_frame_id" default="$(arg id_namespace)/odom" />
+  <arg name="base_frame_id" default="$(arg id_namespace)/base_link" />
+  <arg name="global_frame_id" default="map" />
+
+
+
+  <!-- Map server -->
+  <node pkg="map_server" type="map_server" name="map_server" args="$(arg map_file)">
+    <param name="frame_id" value="map"/>
+    <remap from="map" to="/map" />
+    <remap from="map_metadata" to="/map_metadata" />
+  </node>
+
+  <!-- AMCL Node -->
+  <node pkg="amcl" type="amcl" name="amcl" ns="$(arg namespace)">
+    <rosparam file="$(find wheelchair_navigation)/param/amcl.yaml" command="load" />
+    <param name="odom_frame_id" value="$(arg odom_frame_id)"/>
+    <param name="base_frame_id" value="$(arg base_frame_id)"/>
+    <remap from="scan"                      to="scan_multi"/>
+    <remap from="map" to="/map" />
+  </node>
+
+
+  <!--  Navigation -->
+
+  <node pkg="locomove_base" type="move_base" respawn="false" name="locomotor" output="screen" ns="$(arg namespace)">
+    <rosparam file="$(find wheelchair_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find wheelchair_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find wheelchair_navigation)/param/local_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find wheelchair_navigation)/param/global_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find wheelchair_navigation)/param/move_base_params.yaml" command="load"/>
+    <rosparam file="$(find wheelchair_navigation)/param/dwb_local_planner_params.yaml" command="load"/>
+    <rosparam file="$(find wheelchair_navigation)/param/global_planner_params.yaml" command="load"/>
+    <rosparam command="load" file="$(find wheelchair_navigation)/param/prohibition_areas.yaml" ns="global_costmap/costmap_prohibition_layer" />
+    <!-- <rosparam command="load" file="$(find wheelchair_navigation)/param/preferred_paths.yaml"/> -->
+    <rosparam command="load" file="$(env ROS_HOME)/logs/navigation/preferred_paths.yaml" />"
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)" />
+    <remap from="map" to="/map" />
+    <remap from="/amcl_pose" to="amcl_pose" />
+    <remap from="/move_base_simple/goal" to="$(arg namespace)/move_base_simple/goal" />
+    <param name="global_costmap/global_frame" value="$(arg global_frame_id)" />
+    <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)" />
+    <param name="local_costmap/global_frame" value="$(arg odom_frame_id)" />
+    <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)" />
+    <param name="global_costmap/obstacle_layer/scan_filtered_front/sensor_frame" value="$(arg base_frame_id)" />
+    <param name="global_costmap/obstacle_layer/scan_filtered_back/sensor_frame" value="$(arg base_frame_id)" />
+    <param name="local_costmap/obstacle_layer/scan_filtered_front/sensor_frame" value="$(arg base_frame_id)" />
+    <param name="local_costmap/obstacle_layer/scan_filtered_back/sensor_frame" value="$(arg base_frame_id)" />
+    <param name="local_costmap/obstacle_layer/scan_depth/sensor_frame" value="$(arg base_frame_id)" />
+    <param name="global_costmap/obstacle_layer/scan_depth/sensor_frame" value="$(arg base_frame_id)" />
+  </node>
+
+  <include file="$(find twist_mux)/launch/twist_mux.launch">
+    <arg name="ns" value="$(arg namespace)"/>
+  </include>
+  <group if="$(arg open_rviz)">
+    <node args="-d $(find wheelchair_navigation)/rviz/default.rviz" name="rviz" pkg="rviz" required="true" type="rviz" />
+  </group>
+
+
+
+</launch>

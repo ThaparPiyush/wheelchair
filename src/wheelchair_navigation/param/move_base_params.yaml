@@ -1,0 +1,37 @@
+# shutdown_costmaps: false
+footprint: [[-0.375,-0.3], [0.375,-0.3], [0.375,0.3], [-0.375,0.3]]
+footprint_padding: 0.05
+
+planner_frequency: 2.0
+planner_patience: 5.0
+controller_frequency: 10.0
+controller_patience: 15
+conservative_reset_dist: 2.5
+
+oscillation_timeout: 30
+oscillation_distance: 0.5
+
+max_planning_retries: 0
+clearing_rotation_allowed: false
+
+# Planners
+base_local_planner: nav_core_adapter::LocalPlannerAdapter
+LocalPlannerAdapter:
+#  planner_name: teb_local_planner::TebLocalPlannerROS
+  planner_name: dwb_local_planner::DWBLocalPlanner
+
+#base_local_planner: dwa_local_planner/DWAPlannerROS
+base_global_planner: nav_core_adapter::GlobalPlannerAdapter
+GlobalPlannerAdapter:
+  planner_name: dlux_global_planner::DluxGlobalPlanner
+
+recovery_behavior_enabled: true
+recovery_behaviors: [{name: conservative_reset, type: clear_costmap_recovery/ClearCostmapRecovery}, {name: aggressive_reset, type: clear_costmap_recovery/ClearCostmapRecovery}]
+conservative_reset:
+  force_updating: true
+  reset_distance: 2.0        # clear obstacles farther away than 3.0 m
+  layer_names: ["obstacle_layer"]
+aggressive_reset:
+  force_updating: true
+  reset_distance: 2.0        # clear obstacles farther away than 3.0 m
+  layer_names: ["obstacle_layer"]

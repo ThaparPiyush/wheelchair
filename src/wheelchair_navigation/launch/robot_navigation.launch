@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="map_file" default="$(find wheelchair_cartographer)/maps/hospital.yaml"/>
+  <arg name="cmd_vel_topic" default="navigation/cmd_vel" />
+  <arg name="odom_topic" default="/odom" />
+  <arg default="$(find xacro)/xacro --inorder '$(find wheelchair_description)/urdf/wheelchair.xacro'" name="urdf_file" />
+  <arg name="global_frame_id" default="map" />
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+  </node>
+
+  <!-- Map server -->
+  <node pkg="map_server" type="map_server" name="map_server" args="$(arg map_file)">
+    <param name="frame_id" value="map"/>
+    <remap from="map" to="/map" />
+  </node>
+
+  <!-- AMCL Node -->
+  <!-- <node pkg="amcl" type="amcl" name="amcl">
+    <rosparam file="$(find wheelchair_navigation)/param/amcl.yaml" command="load" />
+    <remap from="map" to="/map" />
+  </node> -->
+  <include file="$(find wheelchair_navigation)/launch/amcl.launch"/>
+
+   <!-- Navigation -->
+
+  <node pkg="locomove_base" type="move_base" respawn="false" name="locomotor" output="screen">
+    <rosparam file="$(find wheelchair_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find wheelchair_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find wheelchair_navigation)/param/local_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find wheelchair_navigation)/param/global_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find wheelchair_navigation)/param/move_base_params.yaml" command="load"/>
+    <rosparam file="$(find wheelchair_navigation)/param/dwb_local_planner_params.yaml" command="load"/>
+    <rosparam file="$(find wheelchair_navigation)/param/global_planner_params.yaml" command="load"/>
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)" />
+    <!-- <remap from="/amcl_pose" to="amcl_pose" /> -->
+  </node>
+
+  <include file="$(find twist_mux)/launch/twist_mux.launch">
+  </include>
+  <!-- Rviz -->
+  <node args="-d $(find wheelchair_navigation)/rviz/wheelchair_navigation.rviz" name="rviz" pkg="rviz" required="true" type="rviz"/>
+
+
+
+
+</launch>
