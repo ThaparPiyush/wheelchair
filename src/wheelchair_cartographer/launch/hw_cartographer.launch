@@ -2,7 +2,7 @@
 <launch>
   <!-- Arguments -->
   <arg name="configuration_basename" default="wheelchair_lds_2d.lua"/>
-  <arg name="open_rviz" default="false"/>
+  <arg name="open_rviz" default="true"/>
   <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find wheelchair_description)/urdf/wheelchair.xacro'" />
   <arg name="multi_robot_name" default=""/>
   <param name="robot_description" command="$(arg urdf_file)" />
@@ -12,18 +12,22 @@
     <param name="tf_prefix" value="$(arg multi_robot_name)"/>
   </node>
 
-  <!--Lidar-->
-  <include file="$(find hls_lfcd_lds_driver)/launch/hlds_laser.launch"/>
+  <!--Hardware>
+  <include file= "$(find wheelchair_control)/launch/hw_control.launch"/-->
 
-  <!--Hardware-->
-  <include file= "$(find wheelchair_control)/launch/hw_control.launch"/>
+  <!--Lidar>
+  <include file="$(find hls_lfcd_lds_driver)/launch/hlds_laser.launch"/-->
 
-  </include-->
+  <!--Tracking Camera>
+  <include file= "$(find realsense2_camera)/launch/rs_t265.launch"/-->
+
+  <!--node pkg="tf" type="static_transform_publisher" name="frontcamTF_broadcaster" args="0.1 0 0 -1.57 0 -1.57  base_link camera_pose_frame 100" /-->
+
 
   <!-- cartographer_node -->
   <node pkg="cartographer_ros" type="cartographer_node" name="cartographer_node" args="-configuration_directory $(find wheelchair_cartographer)/config -configuration_basename $(arg configuration_basename)" output="screen">
     <remap from="odom" to="camera/odom/sample"/>
-    <!--remap from="/scan" to="/scan_multi"/-->
+    <remap from="/scan" to="/scan_filtered"/>
     <!--remap from="points2" to="/camera/depth/points" / -->
   </node>
 
