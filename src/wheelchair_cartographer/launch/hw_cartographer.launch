@@ -21,12 +21,16 @@
   <!--Tracking Camera>
   <include file= "$(find realsense2_camera)/launch/rs_t265.launch"/-->
 
-  <!--node pkg="tf" type="static_transform_publisher" name="frontcamTF_broadcaster" args="0.1 0 0 -1.57 0 -1.57  base_link camera_pose_frame 100" /-->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="frontcamTF_broadcaster" args="0 0 0 0 0 0  base_link camera_pose_frame 100" /> -->
 
-
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_rs_t265_link" args="0 0 0 0 0 0 base_link rs_t265_pose_frame 10000" />
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
+    <rosparam command="load" file="$(find wheelchair_cartographer)/config/wheelchair_ekf.yaml"/>
+    <remap from="odometry/filtered" to="odom"/>
+  </node>
   <!-- cartographer_node -->
   <node pkg="cartographer_ros" type="cartographer_node" name="cartographer_node" args="-configuration_directory $(find wheelchair_cartographer)/config -configuration_basename $(arg configuration_basename)" output="screen">
-    <remap from="odom" to="camera/odom/sample"/>
+    <!-- <remap from="odom" to="rs_t265/odom/sample"/> -->
     <remap from="/scan" to="/scan_filtered"/>
     <!--remap from="points2" to="/camera/depth/points" / -->
   </node>
