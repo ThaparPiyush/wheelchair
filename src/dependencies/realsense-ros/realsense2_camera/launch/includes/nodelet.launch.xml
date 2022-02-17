@@ -56,7 +56,7 @@
   <arg name="enable_sync"         default="false"/>
   <arg name="align_depth"         default="false"/>
 
-  <arg name="base_frame_id"             default="base_link"/>
+  <arg name="base_frame_id"             default="$(arg tf_prefix)_link"/>
   <arg name="depth_frame_id"            default="$(arg tf_prefix)_depth_frame"/>
   <arg name="infra1_frame_id"           default="$(arg tf_prefix)_infra1_frame"/>
   <arg name="infra2_frame_id"           default="$(arg tf_prefix)_infra2_frame"/>

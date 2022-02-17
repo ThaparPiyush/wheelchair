@@ -9,8 +9,9 @@ https://github.com/IntelRealSense/librealsense/blob/master/third-party/libtm/lib
   <arg name="usb_port_id"         default=""/>
   <arg name="device_type"         default="t265"/>
   <arg name="json_file_path"      default=""/>
-  <arg name="camera"              default="camera"/>
+  <arg name="camera"              default="t265"/>
   <arg name="tf_prefix"           default="$(arg camera)"/>
+
 
   <arg name="fisheye_width"       default="-1"/> 
   <arg name="fisheye_height"      default="-1"/>
@@ -33,7 +34,9 @@ https://github.com/IntelRealSense/librealsense/blob/master/third-party/libtm/lib
   <arg name="unite_imu_method"      default=""/>
 
   <arg name="publish_odom_tf"     default="true"/>
-  
+    <rosparam>
+      /camera/tracking_module/enable_pose_jumping: false
+  </rosparam>
   <group ns="$(arg camera)">
     <include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml">
       <arg name="tf_prefix"                value="$(arg tf_prefix)"/>
@@ -42,6 +45,9 @@ https://github.com/IntelRealSense/librealsense/blob/master/third-party/libtm/lib
       <arg name="device_type"              value="$(arg device_type)"/>
       <arg name="json_file_path"           value="$(arg json_file_path)"/>
 
+      <arg name="base_frame_id"             default="$(arg tf_prefix)_link"/>
+      <arg name="pose_frame_id"             default="base_link"/>   <!--$(arg tf_prefix)_pose_frame -->
+      
       <arg name="enable_sync"              value="$(arg enable_sync)"/>
 
       <arg name="fisheye_width"            value="$(arg fisheye_width)"/>
