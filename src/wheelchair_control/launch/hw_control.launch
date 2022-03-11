@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <node pkg="wheelchair_control" type="mover.py" name="mover" output="screen">
-  </node>
-</launch>

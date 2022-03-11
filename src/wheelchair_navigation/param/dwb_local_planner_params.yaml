@@ -12,19 +12,19 @@ DWBLocalPlanner:
   yaw_goal_tolerance: 0.07
 
   # Acceleration Limits
-  acc_lim_x: 0.3 #0.5 (29/11 acceleration caluse remapped according to controller manager)
+  acc_lim_x: 0.1 #0.5 (29/11 acceleration caluse remapped according to controller manager)
   acc_lim_y: 0.0
   acc_lim_trans: 0.3 #0.5 (29/11 acceleration caluse remapped according to controller manager) 
   acc_lim_theta: 1.4285 #2.3809 (29/11 acceleration caluse remapped according to controller manager) 
   decel_lim_theta: -1.4285  #-2.3809 (29/11 acceleration caluse remapped according to controller manager) 
-  decel_lim_x: -0.3  #-1.8 (29/11 acceleration caluse remapped according to controller manager) 
+  decel_lim_x: -0.1  #-1.8 (29/11 acceleration caluse remapped according to controller manager) 
 
   # Velocity Limits
   max_vel_theta: 0.3 #4.76 #0.5
   min_speed_theta: 0.15
-  max_speed_xy: 0.4
-  min_speed_xy: 0.15
-  max_vel_x: 0.4
+  max_speed_xy: 0.3
+  min_speed_xy: 0.1
+  max_vel_x: 0.3
   min_vel_x: 0.0 #-0.1 (29/11 backdriven enabled) 
   max_vel_y: 0.0
   min_vel_y: 0.0

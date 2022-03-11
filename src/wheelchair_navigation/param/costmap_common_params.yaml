@@ -9,7 +9,7 @@ obstacle_layer:
  observation_sources: scan_front
  scan_front:
    data_type: LaserScan 
-   topic: scan 
+   topic: scan_filtered 
    marking: true 
    clearing: true 
    min_obstacle_height: -2.0 
