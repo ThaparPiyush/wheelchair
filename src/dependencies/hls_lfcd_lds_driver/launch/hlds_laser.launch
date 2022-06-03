@@ -5,5 +5,5 @@
     <param name="frame_id" value="rplidar"/>
   </node>
     <!--filter-->
-  <include file="$(find laser_filters)/launch/range_filter.launch"/>
+  <include file="$(find laser_filters)/examples/angle_range_filter.launch"/>
 </launch>

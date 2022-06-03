@@ -47,7 +47,7 @@
 #ifndef BOXFILTER_H
 #define BOXFILTER_H
 
-#include <filters/filter_base.h>
+#include <filters/filter_base.hpp>
 
 #include <sensor_msgs/LaserScan.h>
 #include <sensor_msgs/point_cloud_conversion.h>
@@ -55,6 +55,9 @@
 
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
+
+#include <dynamic_reconfigure/server.h>
+#include <laser_filters/BoxFilterConfig.h>
 
 
 namespace laser_filters
@@ -72,7 +75,7 @@ class LaserScanBoxFilter : public filters::FilterBase<sensor_msgs::LaserScan>
       const sensor_msgs::LaserScan& input_scan,
       sensor_msgs::LaserScan& filtered_scan);
 
-  private:
+  protected:
     bool inBox(tf::Point &point);
     std::string box_frame_;
     laser_geometry::LaserProjection projector_;
@@ -82,7 +85,13 @@ class LaserScanBoxFilter : public filters::FilterBase<sensor_msgs::LaserScan>
     
     // defines two opposite corners of the box
     tf::Point min_, max_; 
+    bool invert_filter;
     bool up_and_running_;
+
+    std::shared_ptr<dynamic_reconfigure::Server<BoxFilterConfig>> dyn_server_;
+    void reconfigureCB(BoxFilterConfig& config, uint32_t level);
+    boost::recursive_mutex own_mutex_;
+    BoxFilterConfig config_ = BoxFilterConfig::__getDefault__();
 };
 
 }

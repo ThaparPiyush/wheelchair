@@ -39,6 +39,8 @@
 #ifndef SCAN_SHADOW_DETECTOR_H
 #define SCAN_SHADOW_DETECTOR_H
 
+#include <vector>
+
 namespace laser_filters
 {
 class ScanShadowDetector
@@ -46,35 +48,24 @@ class ScanShadowDetector
 public:
   float min_angle_tan_, max_angle_tan_;  // Filter angle thresholds
 
-  void configure(const float min_angle, const float max_angle)
-  {
-    min_angle_tan_ = tanf(min_angle);
-    max_angle_tan_ = tanf(max_angle);
+  void configure(const float min_angle, const float max_angle);
 
-    // Correct sign of tan around singularity points
-    if (min_angle_tan_ < 0.0)
-      min_angle_tan_ = -min_angle_tan_;
-    if (max_angle_tan_ > 0.0)
-      max_angle_tan_ = -max_angle_tan_;
-  }
-  bool isShadow(const float r1, const float r2, const float included_angle)
-  {
-    const float perpendicular_y_ = r2 * sinf(included_angle);
-    const float perpendicular_x_ = r1 - r2 * cosf(included_angle);
-    const float perpendicular_tan_ = fabs(perpendicular_y_) / perpendicular_x_;
+  /** \brief Check if the point is a shadow of another point within one laser scan.
+   * \param r1 the distance to the first point
+   * \param r2 the distance to the second point
+   * \param included_angle the angle between laser scans for these two points
+   */
+  bool isShadow(const float r1, const float r2, const float included_angle);
 
-    if (perpendicular_tan_ > 0)
-    {
-      if (perpendicular_tan_ < min_angle_tan_)
-        return true;
-    }
-    else
-    {
-      if (perpendicular_tan_ > max_angle_tan_)
-        return true;
-    }
-    return false;
-  }
+  /** \brief Check if the point is a shadow of another point within one laser scan.
+   * Use this method instead of the version without the extra parameters to avoid
+   * computing sin and cos of the angle on every execution.
+   * \param r1 the distance to the first point
+   * \param r2 the distance to the second point
+   * \param included_angle_sin the sine of an angle between laser scans for these two points
+   * \param included_angle_cos the cosine of an angle between laser scans for these two points
+   */
+  bool isShadow(float r1, float r2, float included_angle_sin, float included_angle_cos);
 };
 }
 

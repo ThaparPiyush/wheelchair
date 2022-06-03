@@ -14,8 +14,8 @@ obstacle_layer:
    clearing: true 
    min_obstacle_height: -2.0 
    max_obstacle_height: 2.0 
-   obstacle_range: 5.0
-   raytrace_range: 8.1
+   obstacle_range: 3.4
+   raytrace_range: 3.5
 
 # Footprint
 footprint: [[-0.375,-0.3], [0.375,-0.3], [0.375,0.3], [-0.375,0.3]]

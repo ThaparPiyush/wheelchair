@@ -1,5 +1,0 @@
-<launch>
- 	<node pkg="laser_filters" type="scan_to_scan_filter_chain_range" name="scan_to_scan_filter_chain_range">
-    	<rosparam command="load" file="$(find laser_filters)/examples/angle_bound.yaml" />
-	</node>
-</launch>

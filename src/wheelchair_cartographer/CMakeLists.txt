@@ -11,7 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   geometry_msgs
-  cartographer_ros_msgs
   message_generation 
   tf
 )

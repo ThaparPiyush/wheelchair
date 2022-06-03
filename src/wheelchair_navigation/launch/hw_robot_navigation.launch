@@ -1,5 +1,5 @@
 <launch>
-  <arg default="$(find wheelchair_cartographer)/maps/gmap_lab_test.yaml" name="map_file" />
+  <arg default="$(find wheelchair_cartographer)/maps/lab_rrc.yaml" name="map_file" />
   <arg default="true" name="open_rviz" />
   <arg default="wheelchair_diff/cmd_vel" name="cmd_vel_topic" />
   <arg default="/odom" name="odom_topic" />

@@ -44,7 +44,6 @@
       <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
       <geometry>
        <cylinder radius="${radius_2}" length="${length_2}"/>
-        <!-- <mesh filename="${filename}" scale="${scale}"/> -->
       </geometry>
       <material name="${material}"/>
     </visual>
@@ -116,7 +115,6 @@
      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
      <geometry>
         <sphere radius="${radius_2}"/>
-       <!-- <mesh filename="${filename}" scale="${scale}"/> -->
      </geometry>
      <material name="${material}"/>
    </visual>

@@ -3,7 +3,11 @@
   <!--Include Files-->
   <xacro:include filename="$(find wheelchair_description)/urdf/links_joints.xacro" />
   <xacro:include filename="$(find wheelchair_description)/urdf/wheelchair_gazebo.xacro" />
-   <xacro:include filename="$(find wheelchair_description)/urdf/_d435.xacro" />
+  <xacro:include filename="$(find wheelchair_description)/urdf/_d435.xacro" />
+  <xacro:arg name="use_nominal_extrinsics" default="false"/>
+  <xacro:arg name="add_plug" default="false" />
+  <xacro:arg name="use_mesh" default="true" />
+  <!-- <xacro:include filename="$(find realsense2_description)/urdf/_d435.urdf.xacro" /> -->
 
 
   <link name="base_link"/>
@@ -47,7 +51,7 @@
     </link>
 
     <!--Left Wheel-->
-    <m1_link_cylinder name="left_wheel"
+    <xacro:m1_link_cylinder name="left_wheel"
                       origin_rpy="0 0 0" origin_xyz="0 0 0.027"
                       mass="0.10441"
                       ixx="0.1000000042" ixy="0" ixz="0"
@@ -57,7 +61,7 @@
                       radius_2="0.0028" length_2 ="0.005"
                       material="grey"/>
     <!--joint between chassis and Left wheel-->
-        <w_joint name="chassis_to_left_wheel"
+        <xacro:w_joint name="chassis_to_left_wheel"
                  type="continuous"
                  axis_xyz="0 0 1" axis_rpy="0 0 0"
                  limit_e="100" limit_v="20"
@@ -68,7 +72,7 @@
 
     <!--joint between chassis and Right Wheel-->
     <!--Right Wheel-->
-    <m1_link_cylinder name="right_wheel"
+    <xacro:m1_link_cylinder name="right_wheel"
                        origin_rpy="0 0 0" origin_xyz="0 0 0.027"
                        mass="0.10441"
                        ixx="0.1000000042" ixy="0" ixz="0"
@@ -78,7 +82,7 @@
                        radius_2="0.0028" length_2 ="0.005"
                        material="grey"/>
 
-    <w_joint name="chassis_to_right_wheel"
+    <xacro:w_joint name="chassis_to_right_wheel"
              type="continuous"
              axis_xyz="0 0 1"
              axis_rpy="0 0 0"
@@ -89,7 +93,7 @@
 
     <!--Caster 1,2 and there joints with Base Link-->
 
-    <m_link_sphere name="caster1"
+    <xacro:m_link_sphere name="caster1"
                   origin_rpy="0 0 0" origin_xyz="0 0 0"
                   mass="0.45164"
                   ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
@@ -99,13 +103,13 @@
                   radius="0.1"
                   radius_2="0.001"/>
 
-    <f_joint name="chassis_to_caster1"
+    <xacro:f_joint name="chassis_to_caster1"
              type="fixed"
              axis_xyz="0 0 0"
              origin_rpy="0 0 0" origin_xyz="0.2 -0.25 -0.33"
              parent="chassis" child="caster1" />
 
-     <m_link_sphere name="caster2"
+     <xacro:m_link_sphere name="caster2"
                     origin_rpy="0 0 0" origin_xyz="0 0 0"
                     mass="0.45164"
                     ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
@@ -115,13 +119,13 @@
                     radius="0.1"
                     radius_2="0.001"/>
 
-    <f_joint name="chassis_to_caster2"
+    <xacro:f_joint name="chassis_to_caster2"
              type="fixed"
              axis_xyz="0 0 0"
              origin_rpy="0 0 0" origin_xyz="0.2 0.25 -0.33"
              parent="chassis" child="caster2" />
 
-     <f_link_box name="rod1"
+     <xacro:f_link_box name="rod1"
                  origin_rpy="0 0 0" origin_xyz="0 0 0"
                  mass="0.45164"
                  ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
@@ -130,13 +134,13 @@
                  material="black"
                  size="0.016 0.016 0.6"/>
 
-    <f_joint name="chassis_to_rod1"
+    <xacro:f_joint name="chassis_to_rod1"
              type="fixed"
              axis_xyz="0 0 0"
              origin_rpy="0 0 0" origin_xyz="-0.23 0.24 0.65"
              parent="chassis" child="rod1" />
 
-     <f_link_box name="rod2"
+     <xacro:f_link_box name="rod2"
                  origin_rpy="0 0 0" origin_xyz="0 0 0"
                  mass="0.45164"
                  ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
@@ -145,13 +149,13 @@
                  material="black"
                  size="0.016 0.016 0.6"/>
 
-    <f_joint name="chassis_to_rod2"
+    <xacro:f_joint name="chassis_to_rod2"
              type="fixed"
              axis_xyz="0 0 0"
              origin_rpy="0 0 0" origin_xyz="-0.23 -0.24 0.65"
              parent="chassis" child="rod2" />
 
-     <f_link_box name="camera_base_rod"
+     <xacro:f_link_box name="camera_base_rod"
                  origin_rpy="0 0 0" origin_xyz="0 0 0"
                  mass="0.45164"
                  ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
@@ -160,13 +164,13 @@
                  material="black"
                  size="0.016 0.48 0.016"/>
 
-    <f_joint name="chassis_to_camera_base_rod"
+    <xacro:f_joint name="chassis_to_camera_base_rod"
              type="fixed"
              axis_xyz="0 0 0"
              origin_rpy="0 0 0" origin_xyz="-0.23 0 0.650"
              parent="chassis" child="camera_base_rod" />
 
-     <f_link_box name="lidar_base_rod"
+     <xacro:f_link_box name="lidar_base_rod"
                  origin_rpy="0 0 0" origin_xyz="0 0 0"
                  mass="0.45164"
                  ixx="0.100000005621" ixy="0.100000001310" ixz="0.100000001649"
@@ -175,14 +179,14 @@
                  material="black"
                  size="0.016 0.48 0.016"/>
 
-    <f_joint name="chassis_to_lidar_base_rod"
+    <xacro:f_joint name="chassis_to_lidar_base_rod"
              type="fixed"
              axis_xyz="0 0 0"
              origin_rpy="0 0 0" origin_xyz="0.23 0 -0.15"
              parent="chassis" child="lidar_base_rod" />
 
 <!--Lidar-->
-  <m_link_cylinder name="rplidar"
+  <xacro:m_link_cylinder name="rplidar"
                    origin_rpy="0 0 0" origin_xyz="0 0 0"
                    mass="0.10441"
                    ixx="0.1000000042" ixy="0" ixz="0"
@@ -192,22 +196,23 @@
                    filename="package://wheelchair_description/meshes/rplidar.dae" scale="1 1 1"/>
 
 <!-- joint between chassis and lidar -->
-      <f_joint name="chassis_to_rplidar"
+      <xacro:f_joint name="chassis_to_rplidar"
                type="fixed"
                axis_xyz="0 0 0"
-               origin_rpy="0 0 0" origin_xyz="0.23 0 -0.15"
+               origin_rpy="0 0 3.14" origin_xyz="0.23 0 -0.15"
                parent="chassis" child="rplidar" />
 
 <!--Real_Sense-->
 
-      <sensor_d435 parent="base_link">
+      <xacro:sensor_d435 parent="base_link">
         <origin xyz="-0.23 0 0.860" rpy="0 0 0"/>
-      </sensor_d435>
+      </xacro:sensor_d435>
+
 
     <!--Gazebo Plugin-->
     <gazebo>
       <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <!-- <robotNamespace>/wheelchair</robotNamespace> -->
+        <robotNamespace>/wheelchair</robotNamespace>
         <legacyModeNS>true</legacyModeNS>
       </plugin>
     </gazebo>
