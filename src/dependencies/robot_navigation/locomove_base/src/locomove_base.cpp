@@ -421,9 +421,9 @@ void LocoMoveBase::onNavigationCompleted()
   {
     server_.setSucceeded();
   }
+  publishZeroVelocity();
   plan_loop_timer_.stop();
   control_loop_timer_.stop();
-  publishZeroVelocity();
 
 }
 

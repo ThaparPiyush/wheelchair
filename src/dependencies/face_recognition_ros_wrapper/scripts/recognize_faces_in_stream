@@ -1,0 +1,110 @@
+#!/usr/bin/env python
+
+import imp
+import rospy
+import sys
+import cv2
+import face_recognition
+import pickle
+from cv_bridge import CvBridge, CvBridgeError
+from face_recognition_ros_wrapper.msg import box_list,bounding_box
+from std_msgs.msg import String
+from sensor_msgs.msg import Image
+
+
+class face_recognizer:
+    def __init__(self):
+        self.pub = rospy.Publisher('recognized_faces', String, queue_size=10,latch=True)
+        self.sub = rospy.Subscriber(
+            rospy.get_param(rospy.resolve_name("~video_stream_topic")), 
+            Image, 
+            self.recognize_faces_callback)
+        self.bbx_pub = rospy.Publisher("/human_detected_image/bounding_box", box_list, queue_size=10,latch=True)
+        self.image_pub = rospy.Publisher("face_image",Image, queue_size=10)
+
+
+        self.encodings_data = self.init_encodings_dict()
+
+        self.bridge = CvBridge()
+
+    def init_encodings_dict(self):
+        face_encodings_file = rospy.get_param("face_encodings_location")    
+        encodings_data = pickle.loads(open(face_encodings_file, "rb").read())
+
+        return encodings_data
+
+    def recognize_faces_callback(self, data):
+        cv_image = self.convert_image(data)
+        name,face_list= self.get_face_match(cv_image)
+        for box in face_list:
+            cv2.rectangle(cv_image, (box[3], box[0]), (box[1], box[2]), (0, 0, 255), 2)
+        self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "rgb8"))
+
+        if name is not None:
+            self.pub.publish(name)
+
+    def convert_image(self, data):
+        try:
+            return self.bridge.imgmsg_to_cv2(data, "rgb8")
+        except CvBridgeError as e:
+            print(e)
+
+    def get_face_match(self, cv_image):
+        boxes = face_recognition.face_locations(cv_image, model='hog')
+        final_list=[]
+        if not boxes:
+            return None,[]
+        else:
+            encodings = face_recognition.face_encodings(cv_image, boxes)
+        j=0   
+        list_length=0
+        bbx_list = box_list()
+        face_list=[]
+        for  box in boxes:
+            face_list.append(box)
+        for encoding in encodings:
+            matches = face_recognition.compare_faces(self.encodings_data["encodings"], encoding)
+            bbx_list.header.stamp = rospy.Time.now()
+            if True in matches:
+                matchedIdxs = [i for (i, b) in enumerate(matches) if b]
+                counts = {}
+
+                for i in matchedIdxs:
+                    name = self.encodings_data["names"][i]
+                    counts[name] = counts.get(name, 0) + 1
+
+                name = max(counts, key=counts.get)
+
+                final_list.append([name,(boxes[j][0]+boxes[j][2])/2,(boxes[j][1]+boxes[j][3])/2])
+                list_length += 1
+                coordinates = bounding_box()
+                face_len= int(boxes[j][2])-int(boxes[j][0])
+                
+                coordinates.ymin = int(boxes[j][2])
+                coordinates.xmin = int(boxes[j][3])
+                coordinates.ymax = int(boxes[j][2])+3*int(boxes[j][2])-int(boxes[j][0])
+                coordinates.xmax = int(boxes[j][1])
+                bbx_list.people_list.append(coordinates)
+                j=j+1
+        string=""
+
+        for human in final_list:
+            string=string+str(str(human[1])+","+str(human[2])+","+human[0]+"/")    
+        bbx_list.length = list_length
+        self.bbx_pub.publish(bbx_list)    
+        return string,face_list
+def main(args):
+    try:
+        rospy.init_node('stream_face_recognizer')
+
+        face_recognizer_object = face_recognizer()
+        print("Ready to recognize faces in video stream")
+
+        rospy.spin()
+
+    except rospy.ROSInterruptException as e:
+        print(e)
+
+
+if __name__ == "__main__":
+    main(sys.argv)

@@ -7,7 +7,7 @@
   <node name="static_tf0" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /base_link 1000"/>
 
 
-  <node name="DijkstraVonNeumann" pkg="dlux_global_planner" type="planner_node" output="screen">
+  <!-- <node name="DijkstraVonNeumann" pkg="dlux_global_planner" type="planner_node" output="screen">
     <rosparam command="load" file="$(find dlux_plugins)/test/common.yaml" />
     <rosparam>
     planner/potential_calculator: "dlux_plugins::Dijkstra"
@@ -17,10 +17,10 @@
     blue: 0.8
     marker_ns: "DijkstraVonNeumann/"
     </rosparam>
-  </node>
+  </node> -->
 
 
-  <node name="DijkstraGrid" pkg="dlux_global_planner" type="planner_node" output="screen">
+  <!-- <node name="DijkstraGrid" pkg="dlux_global_planner" type="planner_node" output="screen">
     <rosparam command="load" file="$(find dlux_plugins)/test/common.yaml" />
     <rosparam>
     planner/potential_calculator: "dlux_plugins::Dijkstra"
@@ -58,10 +58,10 @@
     blue: 0.0941176470588
     marker_ns: "DijkstraGradient/"
     </rosparam>
-  </node>
+  </node> -->
 
 
-  <node name="AStarVonNeumannManK" pkg="dlux_global_planner" type="planner_node" output="screen">
+  <!-- <node name="AStarVonNeumannManK" pkg="dlux_global_planner" type="planner_node" output="screen">
     <rosparam command="load" file="$(find dlux_plugins)/test/common.yaml" />
     <rosparam>
     planner/potential_calculator: "dlux_plugins::AStar"
@@ -75,9 +75,9 @@
     marker_ns: "AStarVonNeumannManK/"
     </rosparam>
   </node>
+ -->
 
-
-  <node name="AStarVonNeumannK" pkg="dlux_global_planner" type="planner_node" output="screen">
+  <!-- <node name="AStarVonNeumannK" pkg="dlux_global_planner" type="planner_node" output="screen">
     <rosparam command="load" file="$(find dlux_plugins)/test/common.yaml" />
     <rosparam>
     planner/potential_calculator: "dlux_plugins::AStar"
@@ -569,7 +569,7 @@
     blue: 0.8
     marker_ns: "AStarGradientStepThresh/"
     </rosparam>
-  </node>
+  </node> -->
 
 
   <node name="AStarGradientThresh" pkg="dlux_global_planner" type="planner_node" output="screen">
@@ -581,11 +581,11 @@
     planner/use_kernel: False
     planner/manhattan_heuristic: False
     planner/grid_step_near_high: False
-    red: 0.901960784314
-    green: 0.450980392157
-    blue: 0.0
+    red: 0
+    green: 0
+    blue: 0
     marker_ns: "AStarGradientThresh/"
     </rosparam>
-  </node>
+  </node> 
 
 </launch>

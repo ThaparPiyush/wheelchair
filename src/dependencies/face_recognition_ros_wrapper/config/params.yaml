@@ -1,0 +1,1 @@
+face_encodings_location: '$(find face_recognition_ros_wrapper)/resources/encodings.pickle'

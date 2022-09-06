@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+
+from face_recognition_ros_wrapper.srv import RecognizeFaces, RecognizeFacesResponse
+import rospy
+import cv2
+import face_recognition
+import pickle
+
+import inspect
+import os
+
+def handle_recognize_faces(req):
+    name = "Unknown" 
+
+    image = cv2.imread(req.image_path)
+    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    
+    face_encodings_file = rospy.get_param("face_encodings_location")
+    
+    data = pickle.loads(open(face_encodings_file, "rb").read())
+
+    print("Detecting faces in image: " + req.image_path)
+
+    boxes = face_recognition.face_locations(rgb, model='hog')
+    if not boxes:
+        return RecognizeFacesResponse(name)
+    encoding = face_recognition.face_encodings(rgb, boxes)[0]
+    matches = face_recognition.compare_faces(data["encodings"], encoding)
+    if True in matches:
+        matchedIdxs = [i for (i, b) in enumerate(matches) if b]
+        counts = {}
+
+        for i in matchedIdxs:
+            name = data["names"][i]
+            counts[name] = counts.get(name, 0) + 1
+
+        name = max(counts, key=counts.get)
+
+    return RecognizeFacesResponse(name)
+
+def recognize_faces_server():
+    rospy.init_node("recognize_faces_server")
+    s = rospy.Service('recognize_faces', RecognizeFaces, handle_recognize_faces)
+    print("Ready to recognize faces")
+    rospy.spin()
+
+
+if __name__ == "__main__":
+    recognize_faces_server()

@@ -1,0 +1,9 @@
+<launch>
+	<arg name="video_stream_topic"/>
+
+	<rosparam command="load" file="$(find face_recognition_ros_wrapper)/config/params.yaml" subst_value="true"/>
+
+	<node name="video_stream_face_recognition_service" pkg="face_recognition_ros_wrapper" type="recognize_faces_in_stream" output="screen">
+		<param name="video_stream_topic" type="string" value="$(arg video_stream_topic)"/>
+	</node>
+</launch>

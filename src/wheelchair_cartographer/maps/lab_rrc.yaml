@@ -1,5 +1,5 @@
 image: lab_rrc.pgm
-resolution: 0.050000
+resolution: 0.0500000
 origin: [-8.793636, -9.690653, 0.000000]
 negate: 0
 occupied_thresh: 0.65
