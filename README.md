@@ -17,6 +17,8 @@ Packages
 
 * wheelchair_simulation: consist of all gazebo worlds and launch files
 
+* wheelchair_control: consist of saved setting of motor driver and kangaroo conroller
+
 * wheelchair_cartographer: consist of mapping configurations and launch files
 
 * wheelchair_navigation: consist of navigation parameters and launch files
@@ -68,7 +70,7 @@ I. To perform navigation in any of the world launched and mapped earlier use:
 II. To perform navigation using natural language processing use:
 
 	$ rosrun wheelchair_navigation Voice_NLP
-	
+
 	$ rosrun wheelchair_naviagtion talker
 
 
