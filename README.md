@@ -1,7 +1,6 @@
-# wheelchair
-=========================================================================
+# Autonomus Wheelchair
 
-SLAM using Gmapping, Navigation Stack and gazebo
+In this repo we did SLAM using gmapping, autonomus naviagtion and obstacle avoidance using move_base and localization using amcl.
 
 visit following for detailed elaboration 
 
@@ -25,11 +24,11 @@ Packages
  wheelchair_description
 --------------------------------------------------------------------------
 
-I.To view robot model in Rviz use
+I.To view robot model in Rviz use:
 
 	$ roslaunch wheelchair_description display.launch
 
-II.To view robot model in Gazebo use
+II.To view robot model in Gazebo use:
 
 	$ roslaunch wheelchair_description gazebo.launch
 
@@ -42,7 +41,7 @@ I.To launch any of the gazebo world use
 	$ roslaunch wheelchair_simulation hospital_world.launch
 	
 
-II. To perform teleop operation on robomuse in gazebo use
+II. To perform teleop operation on wheelchair in gazebo use
 
 	$ rosrun wheelchair_simulation robot_teleop_key
 
@@ -50,11 +49,11 @@ II. To perform teleop operation on robomuse in gazebo use
  wheelchair_cartographer
 --------------------------------------------------------------------------
 
-I. To make map of the world using cartographer use
+I. To make map of the world using cartographer use:
 	
 	$ roslaunch wheelchair_cartographer gampping.launch
 
-II. To save the map of the world use
+II. To save the map of the world use:
 	
 	$ rosrun map_server map_saver -f ~/map_name
 
@@ -62,8 +61,15 @@ II. To save the map of the world use
  wheelchair_navigation
 --------------------------------------------------------------------------
 
-I. To perform navigation in any of the world launched and mapped earlier use
+I. To perform navigation in any of the world launched and mapped earlier use:
  
 	$ roslaunch wheelchair_navigation hw_robot_navigation.launch
+
+II. To perform navigation using natural language processing use:
+
+	$ rosrun wheelchair_navigation Voice_NLP
+	
+	$ rosrun wheelchair_naviagtion talker
+
 
 -------------------------------------------------------------------------
